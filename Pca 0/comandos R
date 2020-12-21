@@ -1,6 +1,0 @@
-pdf(espirales.pdf")
-p <- read.csv('/home/gabina/Facultad/Machine Learning/TP0/espirales.data')
-plot(p[,1], p[,2],col=p[,3]+3)
-abline(h=0,col="black")
-abline(v=0,col="black")
-dev.off()

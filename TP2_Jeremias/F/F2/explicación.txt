@@ -1,8 +1,0 @@
-Por cada clase del problema de clasificación, considero el problema binario de clasificación de decidir si un punto es o no de esa clase.
-
-De esta forma, entreno una red neuronal por cada clase; le preguntos si cada punto de test es de su clase y elijo como clase de ese punto
-a aquella cuya red neuronal respondió un valor más alto de pertenencia.
-
-
-Se ejecuta con el script F2.sh; de todos modos no da buen resultado con faces.
-
