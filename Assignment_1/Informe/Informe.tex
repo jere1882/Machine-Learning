@@ -1,0 +1,240 @@
+\documentclass {article} 
+
+\usepackage{lmodern}
+\usepackage [spanish] {babel} 
+\usepackage [T1]{fontenc}
+\usepackage [latin1]{inputenc}
+\usepackage{amsthm} % para poder usar newtheorem
+\usepackage{cancel} %Para poder hacer el simbolo "no es consecuencia semántica" etc.
+\usepackage{graphicx} 
+\usepackage{amsmath} %para poder usar mathbb
+\usepackage{amsfonts} %sigo intentando usar mathbb
+\usepackage{amssymb} %therefore
+\usepackage{ mathabx } %comillas
+\usepackage{ verbatim } 
+\theoremstyle{remark}
+\newtheorem{thm}{Teorema}
+\newtheorem{lem}{Lema}[section]
+\newtheorem{cor}{Corolario}[section]
+\newtheorem{deff}{Definición}[section]
+\newtheorem{obs}{Observación}[section]
+\newtheorem{ej}{Ejercicio}[section]
+\newtheorem{ex}{Ejemplo}[section]
+\newtheorem{alg}{Algoritmo}[section]
+\usepackage[latin1]{inputenc} 
+\usepackage{listings}
+\usepackage{verbatim}
+\usepackage{hyperref}
+\usepackage{proof}
+\usepackage{anysize}
+\marginsize{3cm}{3cm}{3cm}{3cm}
+\usepackage{tikz}
+\usepackage{subcaption}
+
+
+\begin{document} 
+
+
+
+\begin{titlepage}
+
+\newcommand{\HRule}{\rule{\linewidth}{0.5mm}} % Defines a new command for the horizontal lines, change thickness here
+
+\center % Center everything on the page
+ 
+%----------------------------------------------------------------------------------------
+%	HEADING SECTIONS
+%----------------------------------------------------------------------------------------
+
+\textsc{\Large Facultad de Ciencias Exactas, Ingeniería y Agrimensura}\\[1.5cm] % Name of your university/college
+
+\textsc{ \Large Introducción a la Inteligencia Artificial}\\[0.5cm] % Minor heading such as course title
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\HRule \\[0.4cm]
+{ \huge \bfseries TRABAJO PRÁCTICO 1: ÁRBOLES DE DECISIÓN}\\[0.4cm] % Title of your document
+\HRule \\[1.5cm]
+ 
+%----------------------------------------------------------------------------------------
+%	AUTHOR SECTION
+%----------------------------------------------------------------------------------------
+
+%\begin{minipage}{0.4\textwidth}
+%\begin{flushleft} \large
+%\emph{Autor:}\\
+%Rodríguez Jeremías % Your name
+%\end{flushleft}
+%\end{minipage}
+
+%\begin{minipage}{0.4\textwidth}
+%\begin{flushright} \large
+%\emph{Profesor:} \\
+%Mauro Jaskelioff % Supervisor's Name
+%\end{flushright}
+%\end{minipage}\\[4cm]
+
+% If you don't want a supervisor, uncomment the two lines below and remove the section above
+\Large \emph{Alumno: Rodríguez Jeremías}\\
+
+
+%----------------------------------------------------------------------------------------
+%	DATE SECTION
+%----------------------------------------------------------------------------------------
+
+{\large \today}\\[3cm] % Date, change the \today to a set date if you want to be precise
+
+%----------------------------------------------------------------------------------------
+%	LOGO SECTION
+%----------------------------------------------------------------------------------------
+
+%\includegraphics{Logo}\\[1cm] % Include a department/university logo - this will require the graphicx package
+ 
+%----------------------------------------------------------------------------------------
+
+\vfill % Fill the rest of the page with whitespace
+
+\end{titlepage}
+
+\section{Ejercicio 4: Espirales}
+
+En las siguientes tres imágenes vemos la predicción de c4.5 sobre las espirales de la práctica 0 para distintos tamaños de conjunto de entrenamiento: n=150, 600 y 3000. Se clasifica un conjunto de test de n=10000.\\
+
+Se aprecia que, si el conjunto de entrenamiento no es suficientemente grande, el resultado es muy inexacto y el árbol es bastante básico; pero que si ampliamos un poco más el tamaño del conjunto de entrenamiento las predicciones son cada vez más exactas. Para n=3000 la predicción es muy buena.
+
+\begin{center}
+
+
+
+\includegraphics[width=1\textwidth]{4a.pdf}
+
+\includegraphics[width=0.7\textwidth]{4b.pdf}
+
+\includegraphics[width=0.7\textwidth]{4c.pdf}
+
+\end{center}
+
+
+\newpage
+
+\section{Ejercicio 5: Dependencia con la longitud del conjunto de entrenamiento - Sobreajuste y prunning}
+\subsection{Errores}
+En los próximos ejercicios se usa el generador de datos diagonal y el paralelo del trabajo anterior. Recordemos que estos generadores, creaban datasets de tamaño $n$ con una dispersión de datos $c$ y de $d$ dimensiones.
+\par En este ejercicio analizaremos cómo se comporta c4.5 cuando utilizamos conjuntos de entrenamiento con $n$ cada vez mayor. La siguiente gráfica muestra como varía el error porcentual (tanto en el caso diagonal como paralelo) de la predicción de c4.5 sobre un conjunto de test, en el árbol before prunning:
+
+\begin{center}
+
+
+ 
+\includegraphics[width=1\textwidth]{5a.pdf}
+
+
+\end{center}
+
+
+\par Observo que, si tomamos conjuntos de entrenamiento cada vez más grandes, c4.5 clasificará cada vez mejor a los puntos de conjuntos de test. Sin embargo, la curva parece llegar a un comportamiento asintótico que indica que, llegado un cierto tamaño de n, el aumento de n no repercute en una reducción significativa del error. Es decir, tampoco es conviente usar conjuntos de entrenamiento inmensos.
+\par Por otro lado, observo que en los ejemplos de training, el error va aumentando a medida que el conjunto de entrenamiento es mejor. Esto se da porque es más dificil para un árbol "fitear" todos los datos del conjunto de training cada vez más grande.
+\par Una última cosa a apreciar es que, más allá de una diferencia pequeña, las curvas correspondientes al problema paralelo y al diagonal tienen la misma forma y ambos problemas parecen comportarse de forma muy parecida.
+
+
+\par La siguiente gráfica muestra los mismos datos pero sobre el árbol after prunning. Como vemos, el prunning no muestra una gran diferencia con la gráfica before pruning. Esto sucede porque c4.5 casi no está podando nodos, probablemente porque considera que toda la información que aportan los nodos es valiosa y no aumenta la precisión del árbol eliminarlos. Tal vez para valores de n mayores, si considere más beneficioso podar nodos:
+
+
+
+\begin{center}
+
+
+ 
+\includegraphics[width=1\textwidth]{5b.pdf}
+  
+
+\end{center}
+
+\subsection{Tamaño del árbol resultante}
+Ahora analizaremos cómo varía el tamaño del árbol resultante cuando n varía:
+
+\begin{center}
+
+
+ 
+\includegraphics[width=1\textwidth]{5c.pdf}
+ 
+
+\end{center}
+
+En esta primera gráfica (before pruning) podemos observar que el árbol resultante se vuelve cada vez más complejo para el problema diagonal, si proveemos conjuntos de entrenamiento grandes. Por otro lado, el tamaño del árbol del problema paralelo permanece constante. Esto podría indicar que el problema paralelo es más "sencillo" que el problema diagonal, ya que su solución puede expresarse con un árbol muy sencillo y no necesita agregar más nodos para aumentar su precisión. De hecho, vimos en las primeras dos gráficas de este enunciado que el error procentual sobre el conjunto de test era ligeramente menos para el caso paralelo.
+
+\begin{center}
+
+
+ 
+\includegraphics[width=1\textwidth]{5d.pdf}
+ 
+
+\end{center}
+
+Nuevamente, el gráfico after pruning no muestra muchos cambios; solamente se aprecia que en el caso diagonal se podan algunos (pocos) nodos para tamaños de n grandes. Esto sucede porque no hay gran sobreajuste de los datos en el arbol antes de prunear.
+
+
+
+\newpage
+
+\section{Ejercicio 6:  Resistencia al ruido}
+En este ejercicio haremos algo parecido al anterior, analizaremos el error cuando hacemos variar c. Recordemos que a mayor C, más mezclados estarán los datos (ruido).\\
+
+En la siguiente gráfica se ve el error en función de C. También, para cada C, incluyo el error del clasificador ideal (Bayes). Este error lo calculé utilizando un conjunto de test grande, y viendo cuántas veces (porcentualmente) se equivoca este clasificador al clasificar los puntos del test. El clasificador elige siempre aquella clasificación con mayor probabilidad. Para seguir este criterio, calculé la distancia de cada punto al centro de las dos distribuciones normales y clasifiqué el punto con la clase cuyo centro es el más cercano. \\
+
+
+\begin{center}
+
+
+ 
+\includegraphics[width=1\textwidth]{6a.pdf}
+ 
+
+\end{center}
+
+\par A mayor ruido, naturalmente, es mayor la cantidad de error que producen las predicciones. Sin embargo, si comparamos con el clasificador ideal, vemos que los crecimientos (las formas) de las curvas son similares. Es decir, el error de c4.5 no crece de una forma descontrolada; sino que se comporta razonablemente bien frente al ruido. El caso paralelo es ligeramente mejor porque, como ya vimos, es un problema un poco más facil que el diagonal. De todos modos, vemos que para el caso paralelo como el diagonal c4.5 se comporta forma similar frente al ruido.
+\par Una conclusión de esta gráfica entonces es que, en general, los árboles de decisión son robustos frente al ruido.
+ 
+\includegraphics[width=1\textwidth]{6b.pdf}
+ 
+
+No hay diferencias perceptibles entre el caso before pruning y el after pruning. 
+\newpage
+\section{Dimensionalidad}
+Finalmente, en este ejercicio analizaremos qué sucede con el error cuando variamos el parámetro d (cantidad de dimensiones):
+
+\includegraphics[width=1\textwidth]{7.pdf}
+ 
+\par Como podemos observar, cuando aumenta el número de dimensiones el error en el conjunto de training es cada vez menos; pero en el conjunto de test aumenta significativamente. Esto es un ejemplo de sobreajuste: El árbol generado es cada vez más complejo para ajustarse exáctamente a los datos de training (y reduciendo su error); pero al extrapolarlos a un conjunto de test mayor no produce buenos resultados.
+\par Nuevamente, vemos que el problema diagonal presenta un error mucho mayor, consecuencia de su naturaleza más compleja que el paralelo (recordemos que la dispersión de error del problema diagonal es proporcinal a d).
+
+ \newpage
+\section{Problema XOR}
+
+\includegraphics[width=1\textwidth]{8.pdf}
+ 
+El problema xor puede expresarse muy sencillamente con un árbol de decisión pequeño:
+
+\begin{center}
+
+
+If $X \geq 0 \ \cup Y \geq 0$ then clase 0\\
+If $X \leq 0 \ \cup Y \leq 0$ then clase 0  \\
+If $X < 0 \ \cup Y > 0$ then clase 1   \\
+If $X > 0 \ \cup Y < 0$ then clase 1    \\
+\end{center}
+
+
+\par Sin embargo, C4.5 es incapaz de generar este árbol, y clasifica a todos los puntos con un árbol constante. (A todos les asigna clase 0).
+
+\begin{verbatim}
+Decision Tree:
+ 0 (200.0/100.0)
+\end{verbatim}
+\par Esto es consecuencia de que la creación del árbol se detiene prematuramente, dado que ningún atributo individualmente exhibe una asociación significativa a la clase. (Information gain es 0 para ambos atributos)
+ 
+\end{document}
